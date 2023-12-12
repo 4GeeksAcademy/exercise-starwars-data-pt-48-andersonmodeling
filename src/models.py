@@ -35,6 +35,9 @@ class User(Base):
     email = Column(String(50), nullable=False)
     password = Column(String(20), nullable=False)
 
+    character_favorite = relationship("Character_favorite", back_populates="user")
+    planet_favorite = relationship("Planet_favorite", back_populates="user")
+
     
 class Planets(Base):
     __tablename__ = 'planets'
@@ -47,8 +50,16 @@ class Planets(Base):
     terrain = Column(String(100))
     orbital_period = Column(String(100))
 
-    
-    
+    planet_favorite = relationship("Planet_favorite", back_populates="planets")
+
+class Planet_favorite(Base):
+    __tablename__ = "planet_favorite"
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("user.id"))
+    planet_id = Column(Integer, ForeignKey("planets.id"))
+
+    user = relationship("User", back_populates="planet_favorite")
+    planets = relationship("Planets", back_populates="planet_favorite")
 
 class Characters(Base):
     __tablename__ = 'characters'
@@ -60,11 +71,22 @@ class Characters(Base):
     eye_color = Column(String(50))
     identification = Column(String(100))
 
-    
+    character_favorite = relationship("Character_favorite", back_populates="characters")
 
-class Favorites(Base):
-    __tablename__ = 'favorites'
-    
+class Character_favorite(Base):
+    __tablename__ = "character_favorite"
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("user.id"))
+    character_id = Column(Integer, ForeignKey("characters.id"))
+
+    user = relationship("User", back_populates="character_favorite")
+    characters = relationship("Characters", back_populates="character_favorite")
+
+
+
+
+
+
 
    
 
